@@ -1,8 +1,6 @@
-<p align="center">
-  <img src="https://www.corda.net/wp-content/uploads/2016/11/fg005_corda_b.png" alt="Corda" width="500">
-</p>
+# The Obligation CorDapp Sub-Project
 
-# The Obligation CorDapp
+## The Original Readme
 
 This CorDapp comprises a demo of an IOU-like agreement that can be issued, transfered and settled confidentially. The CorDapp includes:
 
@@ -75,10 +73,19 @@ That's it!
 From the lenders UI you can transfer an obligation to a new lender. The procedure is straight-forward. Just select the Party which is to be the new lender.
 
 
-# TODO
+## TODO
 
 1. Resolve party names for the web front-end.
 2. Replace the Corda web server with a reactive spring boot web server
 
+## Fork info
 
-Feel free to submit a PR.
+1. Forked as an experiment in [corda/samples](https://github.com/corda/samples) modularisation
+2. Commands issued to make this repo:
+```
+git clone git@github.com:corda/samples.git
+git clone samples cordapp-sample-obligation && cd cordapp-sample-obligation
+git filter-branch --prune-empty --subdirectory-filter obligation-cordapp release-V4
+```
+3. The plan is to gather frequently used samples under one umbrella project as Git submodules or subtrees if everything goes well ;)
+
