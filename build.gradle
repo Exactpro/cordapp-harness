@@ -151,6 +151,9 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             adminAddress("localhost:10013")
         }
 //      webPort 10014
+        extraConfig = [
+            'sshd.port':'10015'
+        ]
     }
     node {
         name "O=PartyB,L=New York,C=US"
@@ -160,6 +163,9 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             adminAddress("localhost:10023")
         }
 //      webPort 10024
+        extraConfig = [
+            'sshd.port':'10025'
+        ]
     }
 //  node {
 //      name "O=PartyC,L=Paris,C=FR"

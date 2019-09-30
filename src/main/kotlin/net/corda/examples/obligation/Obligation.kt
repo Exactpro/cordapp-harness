@@ -8,7 +8,7 @@ import net.corda.core.crypto.NullKeys
 import net.corda.core.identity.AbstractParty
 import net.corda.core.identity.Party
 import net.corda.core.utilities.toBase58String
-import java.util.*
+import java.util.Currency
 
 @BelongsToContract(ObligationContract::class)
 data class Obligation(val amount: Amount<Currency>,

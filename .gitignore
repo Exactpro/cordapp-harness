@@ -1,3 +1,9 @@
 build/
 .gradle/
 logs/
+.idea/modules.xml
+.idea/modules/
+.idea/vcs.xml
+.idea/codeStyles/
+.idea/libraries/
+.idea/misc.xml
