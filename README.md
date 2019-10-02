@@ -24,14 +24,21 @@ The party names show up as random public keys as they are issued confidentially.
 
 ## Self issue some cash
 
-From the obligation borrowers UI:
-
-1. Click the issue cash button
-2. Enter a currency (GBP) and amount, 10000
-3. Click "issue cash"
-4. Wait for the transaction confirmation
-5. click anywhere
-6. You'll see the "Cash balances" section update
+From command line:
+```
+pushd <behave-dir> && ./gradlew rpc-client:jar && cd rpc-client
+RPCclient="java -jar build/libs/rpc-client.jar"
+partyAaddr_user_pw="localhost:10012 user1 test"
+partyBaddr_user_pw="localhost:10022 user1 test"
+$RPCclient cash-issue   $partyAaddr_user_pw "1000 GBP"
+$RPCclient cash-issue   $partyBaddr_user_pw "1,000.99 GBP"
+$RPCclient cash-issue   $partyAaddr_user_pw "10,000,000 JPY"
+$RPCclient cash-issue   $partyBaddr_user_pw "20.10 GBP"
+$RPCclient cash-issue   $partyAaddr_user_pw "20,750.80 EUR"
+$RPCclient cash-issue   $partyBaddr_user_pw "5,780 USD"
+$RPCclient cash-balance $partyAaddr_user_pw
+$RPCclient cash-balance $partyBaddr_user_pw
+```
 
 ## Settling an obligation
 
