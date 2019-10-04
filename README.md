@@ -17,22 +17,32 @@ Web-interface functions are being phased-out and replaced with rpc-client.
 
 ```
 $RPCclient obligation-issue  $partyB "20,000 JPY" "O=PartyA, L=London, C=GB"
-$RPCclient obligation-list   $partyA
+$RPCclient obligation-issue  $partyB "2000 GBP"   "O=PartyA, L=London, C=GB"
 $RPCclient obligation-list   $partyB
+ < See below >
+$RPCclient obligation-list   $partyA
+Obligations:
+
+LinearId:9e732dcb-9506-411d-a1cd-70019522c4ad
+Issuer: O=PartyB, L=New York, C=US
+Amount:20000 JPY paid:2000 GBP due:2000 GBP to:O=PartyA, L=London, C=GB
+
+LinearId:5826cf25-9e10-48a7-ab79-e10dffc55a7e
+Issuer: O=PartyB, L=New York, C=US
+Amount:20000 JPY paid:0 JPY due:20000 JPY to:O=PartyA, L=London, C=GB
 ```
 
 ## Self issue some cash
 
 From command line:
 ```
-pushd <behave-dir> && ./gradlew rpc-client:jar && cd rpc-client
 RPCclient="java -jar build/libs/rpc-client.jar"
-partyAaddr_user_pw="localhost:10012 user1 test"
-partyBaddr_user_pw="localhost:10022 user1 test"
+partyA="localhost:10012 userA passwdA"
+partyB="localhost:10022 userB passwdB"
 $RPCclient cash-issue   $partyA "1000 GBP"
 $RPCclient cash-issue   $partyB "1,000.99 GBP"
-$RPCclient cash-issue   $partyA "10,000,000 JPY"
-$RPCclient cash-issue   $partyB "20.10 GBP"
+$RPCclient cash-issue   $partyA "100,000,000 JPY"
+$RPCclient cash-issue   $partyB "20.5 GBP"
 $RPCclient cash-issue   $partyA "20,750.80 EUR"
 $RPCclient cash-issue   $partyB "5,780 USD"
 $RPCclient cash-balance $partyA
