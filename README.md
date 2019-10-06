@@ -12,39 +12,42 @@ The CorDapp allows you to issue, transfer (from old lender to new lender) and se
 
 ## What's changed
 Web-interface functions are being phased-out and replaced with rpc-client.
-
-## Issue an obligation
-
 ```
-$RPCclient obligation-issue  $partyB "20,000 JPY" "O=PartyA, L=London, C=GB"
-$RPCclient obligation-issue  $partyB "2000 GBP"   "O=PartyA, L=London, C=GB"
-$RPCclient obligation-list   $partyB
- < See below >
-$RPCclient obligation-list   $partyA
-Obligations:
-
-LinearId:9e732dcb-9506-411d-a1cd-70019522c4ad
-Issuer: O=PartyB, L=New York, C=US
-Amount:20000 JPY paid:2000 GBP due:2000 GBP to:O=PartyA, L=London, C=GB
-
-LinearId:5826cf25-9e10-48a7-ab79-e10dffc55a7e
-Issuer: O=PartyB, L=New York, C=US
-Amount:20000 JPY paid:0 JPY due:20000 JPY to:O=PartyA, L=London, C=GB
-```
-
-## Self issue some cash
-
-From command line:
-```
+# TODO add rpc-client build
+# in a separate terminal window having rpc-client.jar in build/libs
+# issue these commands:
 RPCclient="java -jar build/libs/rpc-client.jar"
 partyA="localhost:10012 userA passwdA"
 partyB="localhost:10022 userB passwdB"
-$RPCclient cash-issue   $partyA "1000 GBP"
+partyC="localhost:10022 userC passwdC"
+```
+
+## Issue an obligation
+```
+$RPCclient obligation-issue  $partyB "20,000 JPY" "O=PartyA, L=Austin, C=US"
+$RPCclient obligation-issue  $partyB "2000 GBP"   "O=PartyA, L=Austin, C=US"  --anonymous
+$RPCclient obligations $partyB
+ < See below >
+$RPCclient obligations $partyA
+Obligations:
+
+LinearId:9e732dcb-9506-411d-a1cd-70019522c4ad
+Issuer: O=PartyB, L=Bath, C=GB
+Amount:20000 JPY paid:2000 JPY due:2000 JPY to:O=PartyA, L=Austin, C=US
+
+LinearId:5826cf25-9e10-48a7-ab79-e10dffc55a7e
+Issuer: O=PartyB, L=Bath, C=GB
+Amount:2000.00 GBP paid:0.00 GBP due:2000.00 GBP to:O=PartyA, L=Austin, C=US
+```
+
+## Self issue some cash
+```
+$RPCclient cash-issue   $partyB "1000 GBP"
 $RPCclient cash-issue   $partyB "1,000.99 GBP"
-$RPCclient cash-issue   $partyA "100,000,000 JPY"
-$RPCclient cash-issue   $partyB "20.5 GBP"
+$RPCclient cash-issue   $partyB "100,000,000 JPY"
+$RPCclient cash-issue   $partyA "20.5 CAD"
 $RPCclient cash-issue   $partyA "20,750.80 EUR"
-$RPCclient cash-issue   $partyB "5,780 USD"
+$RPCclient cash-issue   $partyA "5,780 USD"
 $RPCclient cash-balance $partyA
 $RPCclient cash-balance $partyB
 ```
@@ -52,13 +55,14 @@ $RPCclient cash-balance $partyB
 ## Settling an obligation
 
 In order to complete this step the borrower node should have some cash.
-See the previous step how to issue cash on the borrower's node.
+See the previous step how to issue cash on the borrower's node (partyB).
 
 ```
 $RPCclient obligation-settle  $partyB 9e732dcb-9506-411d-a1cd-70019522c4ad "1500 GBP"
 $RPCclient obligation-list    $partyA
-LinearId:9e732dcb-9506-411d-a1cd-70019522c4ad Amount:2000 GBP Paid:1500 GBP Due:500 GBP
-$RPCclient obligation-settle  $partyB 9e732dcb-9506-411d-a1cd-70019522c4ad "500 GBP"
+LinearId:9e732dcb-9506-411d-a1cd-70019522c4ad
+Issuer: O=PartyB, L=Bath, C=GB
+Amount:2000.00 GBP paid:1500.00 GBP due:500.00 GBP to:O=PartyA, L=Austin, C=US
 ```
 You may see that £1500 of the obligation has been paid down
 
@@ -68,7 +72,10 @@ the cash is transfered from the borrower to the lender.
 Either both the obligation is updated and the cash is transferred or neither happen.
 
 
-From the lenders UI you can transfer an obligation to a new lender. TODO
+Lenders can transfer an obligation to a new lender.
+```
+$RPCclient obligation-transfer $partyA f98a4c3a-0ba8-49e1-9fde-278ed316c095 PartyC
+```
 
 ## Fork info
 
