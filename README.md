@@ -1,4 +1,4 @@
-# The Obligation CorDapp Sub-Project
+# An obligation sample CorDapp Runner
 
 ## From the original Readme
 
@@ -11,18 +11,30 @@ This CorDapp comprises a demo of an IOU-like agreement that can be issued, trans
 The CorDapp allows you to issue, transfer (from old lender to new lender) and settle (with cash) obligations.
 
 ## What's changed
-Web-interface functions are being phased-out and replaced with rpc-client.
+
+* Obligation CorDapp lives in a separate project, wherefrom it is published to a Maven repo
+* This project references specific CorDapp (obligation-j/obligation-k for Java/Kotlin variants resp.)
+* No Web-interface, call CorDapp with an RPC-client. **TODO** add `rpc-client`
+
+## Running
+
+* Make 4 nodes: Notary, PartyA/B/C.
+* Start them
+* Issue obligations, cash, settle & transfer obligations.
 ```
-# TODO add rpc-client build
+./gradlew clean deployNodes
+./runABCN.sh
+
 # in a separate terminal window having rpc-client.jar in build/libs
 # issue these commands:
+
 RPCclient="java -jar build/libs/rpc-client.jar"
 partyA="localhost:10012 userA passwdA"
 partyB="localhost:10022 userB passwdB"
 partyC="localhost:10022 userC passwdC"
 ```
 
-## Issue an obligation
+### Issue an obligation
 ```
 $RPCclient obligation-issue  $partyB "20,000 JPY" "O=PartyA, L=Austin, C=US"
 $RPCclient obligation-issue  $partyB "2000 GBP"   "O=PartyA, L=Austin, C=US"  --anonymous
@@ -40,7 +52,7 @@ Issuer: O=PartyB, L=Bath, C=GB
 Amount:2000.00 GBP paid:0.00 GBP due:2000.00 GBP to:O=PartyA, L=Austin, C=US
 ```
 
-## Self issue some cash
+### Self-issue some cash
 ```
 $RPCclient cash-issue   $partyB "1000 GBP"
 $RPCclient cash-issue   $partyB "1,000.99 GBP"
@@ -52,11 +64,10 @@ $RPCclient cash-balance $partyA
 $RPCclient cash-balance $partyB
 ```
 
-## Settling an obligation
+### Settle an obligation
 
 In order to complete this step the borrower node should have some cash.
 See the previous step how to issue cash on the borrower's node (partyB).
-
 ```
 $RPCclient obligation-settle  $partyB 9e732dcb-9506-411d-a1cd-70019522c4ad "1500 GBP"
 $RPCclient obligation-list    $partyA
@@ -71,6 +82,8 @@ The settlement happens via atomic DvP.  The obligation is updated at the same ti
 the cash is transfered from the borrower to the lender.
 Either both the obligation is updated and the cash is transferred or neither happen.
 
+
+### Transfer an obligation
 
 Lenders can transfer an obligation to a new lender.
 ```

@@ -2,9 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="cordapp-obligation-k.integrationTest" target="1.8" />
-      <module name="cordapp-obligation-k.main" target="1.8" />
-      <module name="cordapp-obligation-k.test" target="1.8" />
+      <module name="testnode.main" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
