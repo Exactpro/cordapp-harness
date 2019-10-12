@@ -4,13 +4,14 @@ This CorDapp runs a pre-built Cordapp named in line 12 of the build.gradle
 ```
         testCordapp1 = "com.r3.corda:corda-ptflows:4.2"
 ```
-against net.corda-4.1 on a single node local.
+against CE 4.2 on a single local node.
 
 ## Running
 
-* Make one node: Notary1.
+* Ensure CE 4.2 in mavenLocal, see ENT-3952 for instruction.
+* Make a node Notary1
 * Start it
-* Start a flow in an intreactive shell.
+* Start a flow in the node's interactive shell
 ```
 ./gradlew clean deployNodes
 
