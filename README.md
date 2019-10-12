@@ -1,6 +1,6 @@
 # A CorDapp Runner
 
-This CorDapp runs a pre-built Cordapp named in line 12 of the build.gradle
+This harness runs a pre-built Cordapp named in line 11 of the build.gradle
 ```
         testCordapp1 = "com.r3.corda:corda-ptflows:4.2"
 ```
@@ -18,7 +18,14 @@ against CE 4.2 on a single local node.
 # in tmux
 . runN.sh
 
-# switch to the window labeled Notary1 and issue this command:
+# tmux opens a new window named Notary1; wait for >>> prompt, and issue this command:
+
+start LinearStateBatchNotariseFlow notary: "Notary1", n: 50, x: 13, logIterations: yes, transactionsPerSecond: 15
+
+
+# or (switch tmux window back; hit Enter on password prompt)
+
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  -p 10004 userN@localhost \
 start LinearStateBatchNotariseFlow notary: "Notary1", n: 50, x: 13, logIterations: yes, transactionsPerSecond: 15
 ```
 

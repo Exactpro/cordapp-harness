@@ -3,12 +3,11 @@ buildscript {
         corda_release_group = "com.r3.corda"
         corda_release_version = "4.2"
         corda_gradle_plugins_version = "4.0.45"
-        junit_version = "4.12"
         quasar_version = "0.7.10"
         log4j_version = "2.11.2"
         slf4j_version = "1.7.25"
         corda_platform_version = 4
-        testCordapp4 = "cordapp-sample:obligation-j:0.0.1"
+
         testCordapp1 = "com.r3.corda:corda-ptflows:4.2"
     }
 
@@ -30,9 +29,7 @@ allprojects {
       mavenLocal()
       mavenCentral()
       jcenter()
-      maven { url 'https://jitpack.io' }
       maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }
-      maven { url 'https://repo.gradle.org/gradle/libs-releases' }
     }
 }
 
@@ -42,7 +39,7 @@ apply plugin: 'net.corda.plugins.quasar-utils'
 
 // this is a fictional cordapp of this project
 // it's harmless, though it's reported as a loaded cordapp
-// to hide it we add 'projectCordapp { deploy = false }' in node {}
+// to fix that add 'projectCordapp { deploy = false }' in node {}
 cordapp {
     // silence a [jar] task warning
     targetPlatformVersion corda_platform_version
@@ -73,7 +70,8 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             address("localhost:10002")
             adminAddress("localhost:10003")
         }
-        rpcUsers = [[ user: "userN", "password": "passwN", "permissions": ["ALL"]]]
+        extraConfig = [ 'sshd.port':'10004' ]
+        rpcUsers = [[ user: "userN", "password": "", "permissions": ["ALL"]]]
         projectCordapp { deploy = false }
         cordapp("$testCordapp1")
     }
