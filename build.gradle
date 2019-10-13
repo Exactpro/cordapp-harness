@@ -3,12 +3,11 @@ buildscript {
         corda_release_group = "net.corda"
         corda_release_version = "4.1"
         corda_gradle_plugins_version = "4.0.45"
-        kotlin_version = "1.2.71"
-        junit_version = "4.12"
         quasar_version = "0.7.10"
         log4j_version = "2.11.2"
         slf4j_version = "1.7.25"
         corda_platform_version = 4
+
         testCordapp4 = "cordapp-sample:obligation-j:0.0.1"
     }
 
@@ -19,7 +18,6 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "net.corda.plugins:cordapp:$corda_gradle_plugins_version"
         classpath "net.corda.plugins:cordformation:$corda_gradle_plugins_version"
         classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
@@ -27,82 +25,39 @@ buildscript {
 }
 
 allprojects {
-    apply plugin: 'kotlin'
     repositories {
       mavenLocal()
       mavenCentral()
       jcenter()
-      maven { url 'https://jitpack.io' }
       maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }
       maven { url 'https://repo.gradle.org/gradle/libs-releases' }
     }
-
-    configurations {
-        compile {
-            // We want to use SLF4J's version of these bindings: jcl-over-slf4j
-            // Remove any transitive dependency on Apache's version.
-            exclude group: 'commons-logging', module: 'commons-logging'
-        }
-    }
-
-    jar {
-        // CorDapps do not configure a Node's logging.
-        exclude '**/log4j2*.xml'
-    }
 }
 
-//apply plugin: 'kotlin'
 apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
+// this is a fictional cordapp of this project
+// it's harmless, though it's reported as a loaded cordapp
+// to fix that add 'projectCordapp { deploy = false }' in node {}
 cordapp {
+    // silence a [jar] task warning
     targetPlatformVersion corda_platform_version
     minimumPlatformVersion corda_platform_version
-    contract {
-        name "Obligation CorDapp"
-        vendor "Corda Open Source"
-        licence "Apache License, Version 2.0"
-        versionId 1
-    }
     workflow {
-        name "Obligation CorDapp"
-        vendor "Corda Open Source"
-        licence "Apache License, Version 2.0"
+        name "project"
+        vendor "Exactpro"
+        licence "Apache-2.0"
         versionId 1
     }
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDir "../config/dev"
-        }
-    }
-    integrationTest {
-        kotlin {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integrationTest/kotlin')
-        }
-    }
-}
-
-configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-    cordaCompile "$corda_release_group:corda-core:$corda_release_version"
-    cordaCompile "$corda_release_group:corda-jackson:$corda_release_version"
-    cordaCompile "$corda_release_group:corda-rpc:$corda_release_version"
+//  cordaRuntime "$corda_release_group:corda-core:$corda_release_version"
+//  cordaRuntime "$corda_release_group:corda-jackson:$corda_release_version"
+    cordaRuntime "$corda_release_group:corda-rpc:$corda_release_version"
     cordaRuntime "$corda_release_group:corda:$corda_release_version"
- // compileOnly  "$corda_release_group:corda-webserver-impl:$corda_release_version"
- // cordaRuntime "$corda_release_group:corda-webserver:$corda_release_version"
-
     cordaRuntime "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
 
     cordapp "$corda_release_group:corda-finance-contracts:$corda_release_version"
@@ -111,17 +66,9 @@ dependencies {
     cordapp "$testCordapp4"
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
-    kotlinOptions {
-        languageVersion = "1.2"
-        apiVersion = "1.2"
-        jvmTarget = "1.8"
-        javaParameters = true   // Useful for reflection.
-    }
-}
-
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
     nodeDefaults {
+        projectCordapp { deploy = false }
         cordapp("$corda_release_group:corda-finance-contracts:$corda_release_version")
         cordapp("$corda_release_group:corda-finance-workflows:$corda_release_version")
         cordapp("$corda_release_group:corda-confidential-identities:$corda_release_version")
@@ -137,9 +84,6 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             adminAddress("localhost:10003")
         }
         rpcUsers = [[ user: "userN", "password": "passwN", "permissions": ["ALL"]]]
-        projectCordapp {
-            deploy = false
-        }
         cordapps.clear()
     }
     node {
