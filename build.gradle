@@ -8,7 +8,7 @@ buildscript {
         slf4j_version = "1.7.25"
         corda_platform_version = 4
 
-        testCordapp4 = "cordapp-sample:obligation-j:0.0.1"
+        testCordapp4 = "com.exactpro.cordapp-sample:obligation-j:0.0.1"
     }
 
     repositories {
@@ -26,7 +26,8 @@ buildscript {
 
 allprojects {
     repositories {
-      mavenLocal()
+   // maven { url "https://dl.bintray.com/exactpro/cordapp-library/" } // cordapp-sample:obligation-j|k
+   // mavenLocal()
       mavenCentral()
       jcenter()
       maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }

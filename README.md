@@ -1,8 +1,9 @@
 # An obligation sample CorDapp Runner
 
-## From the original Readme
+This project demonstrates running a pre-packaged CorDapp, the samples/obligation-cordapp
 
-This CorDapp comprises a demo of an IOU-like agreement that can be issued, transfered and settled confidentially. The CorDapp includes:
+The Java version of the said CorDapp (packaged as `com.exactpro.cordapp-sample:obligation-j:0.0.1`) demoes
+an IOU-like agreement that can be issued, transfered and settled confidentially. The CorDapp includes:
 
 * An obligation state definition that records an amount of any currency payable from one party to another. The obligation state
 * A contract that facilitates the verification of issuance, transfer (from one lender to another) and settlement of obligations
@@ -10,11 +11,7 @@ This CorDapp comprises a demo of an IOU-like agreement that can be issued, trans
 
 The CorDapp allows you to issue, transfer (from old lender to new lender) and settle (with cash) obligations.
 
-## What's changed
-
-* Obligation CorDapp lives in a separate project, wherefrom it is published to a Maven repo
-* This project references specific CorDapp (obligation-j/obligation-k for Java/Kotlin variants resp.)
-* No Web-interface, call CorDapp with an RPC-client. **TODO** add `rpc-client`
+## **TODO** publish rpc-client
 
 ## Running
 
