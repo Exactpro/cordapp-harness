@@ -27,6 +27,11 @@ start LinearStateBatchNotariseFlow notary: "Notary1", n: 50, x: 13, logIteration
 
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  -p 10004 userN@localhost \
 start LinearStateBatchNotariseFlow notary: "Notary1", n: 50, x: 13, logIterations: yes, transactionsPerSecond: 15
+
+# or with an rpc-client [3]
+RPCclient="java -jar build/libs/rpc-client-oss41.jar"
+notary="localhost:10002 userN z"
+$RPCclient run $notary LinearStateBatchNotariseFlow "notary: \"Notary1\", n: 50, x: 13, logIterations: yes, transactionsPerSecond: 15"
 ```
 
 ## References
@@ -34,3 +39,5 @@ start LinearStateBatchNotariseFlow notary: "Notary1", n: 50, x: 13, logIteration
 [LinearStateBatchNotariseFlow](https://github.com/corda/enterprise/blob/release/ent/4.3/perftestcordapp/src/main/kotlin/com/r3/corda/enterprise/perftestcordapp/flows/LinearStateBatchNotariseFlow.kt)
 
 [CQA-143 re:NotaryPerf - Add LinearStateBatchNotariseFlow](https://r3-cev.atlassian.net/browse/CQA-143)
+
+[commit 065ae57](https://github.com/mz0/corda-rpc-client/tree/065ae57)

@@ -71,7 +71,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             adminAddress("localhost:10003")
         }
         extraConfig = [ 'sshd.port':'10004' ]
-        rpcUsers = [[ user: "userN", "password": "", "permissions": ["ALL"]]]
+        rpcUsers = [[ user: "userN", "password": "z", "permissions": ["ALL"]]]
         projectCordapp { deploy = false }
         cordapp("$testCordapp1")
     }
