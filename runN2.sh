@@ -1,9 +1,11 @@
-nodes="Notary1"
-
-for node in $nodes; do
-    tmux new-window -n $node java -Dcapsule.jvm.args="-Xmx512m -XX:+UseG1GC" -jar build/nodes/${node}/corda.jar -b build/nodes/${node} ;\
+grep -o "O=[^,]*," build.gradle |sed 's/O=//;s/,//' |\
+while read node; do
+    # ls build/nodes/"$node"
+    tmux new-window -n "$node" \
+    java -Dcapsule.jvm.args="-Xmx512m -XX:+UseG1GC" -jar "build/nodes/${node}/corda.jar" -b "build/nodes/${node}" ;\
   [ $? -eq 0 -o $? -eq 143 ] || sh
 done
+
 # '-Dname=PartyA' \
 # '-Dcapsule.jvm.args=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5008 -javaagent:drivers/jolokia-jvm-1.6.0-agent.jar=port=7008,logHandlerClass=net.corda.node.JolokiaSlf4jAdapter' \
 # '-jar' '<projectdir>/build/nodes/PartyA/corda.jar'; \

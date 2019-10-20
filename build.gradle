@@ -62,8 +62,8 @@ dependencies {
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
     nodeDefaults {
     }
-    node {
-        name "O=Notary1,L=London,C=GB"
+    node {              // København
+        name "O=Notar 1, L=Copenhagen, C=DK"
         notary = [validating : false]
         p2pPort 10001
         rpcSettings {
@@ -72,6 +72,18 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         }
         extraConfig = [ 'sshd.port':'10004' ]
         rpcUsers = [[ user: "userN", "password": "z", "permissions": ["ALL"]]]
+        projectCordapp { deploy = false }
+        cordapp("$testCordapp1")
+    }
+    node {
+        name "O=Notář, L=Prague, C=CZ"
+        notary = [validating : false]
+        p2pPort 10021
+        rpcSettings {
+            address("localhost:10022")
+            adminAddress("localhost:10023")
+        }
+        rpcUsers = [[ user: "userN", "password": "x", "permissions": ["ALL"]]]
         projectCordapp { deploy = false }
         cordapp("$testCordapp1")
     }
