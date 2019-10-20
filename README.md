@@ -29,9 +29,18 @@ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  -p 10004 userN@
 start LinearStateBatchNotariseFlow notary: "Notary1", n: 50, x: 13, logIterations: yes, transactionsPerSecond: 15
 
 # or with an rpc-client [3]
-RPCclient="java -jar build/libs/rpc-client-oss41.jar"
+RPCclient="java -jar build/libs/rpc-client-ent42.jar"
 notary="localhost:10002 userN z"
-$RPCclient run $notary LinearStateBatchNotariseFlow "notary: \"Notary1\", n: 50, x: 13, logIterations: yes, transactionsPerSecond: 15"
+notar2="localhost:10022 userN x"
+
+$RPCclient run $notary LinearStateBatchNotariseFlow "notary: Notář, n: 51, x: 13, logIterations: yes, transactionsPerSecond: 15"
+
+# or use an unambigiously abbreviated flow name (note that space and comma necessitate quotes, either single or double)
+$RPCclient run $notary BatchNotarise "notary: Notář, n: 51, x: 2, logIterations: no, transactionsPerSecond: 85"
+$RPCclient run $notar2 BatchNota "notary: 'Notar 1', n: 51, x: 2, logIterations: no, transactionsPerSecond: 85"
+$RPCclient run $notary BatchN "notary: \"Notary1\", n: 51, x: 13, logIterations: no, transactionsPerSecond: 15"
+$RPCclient run $notary Ba "notary: 'O=Notář,L=Prague,C=CZ', n: 51, x: 2, logIterations: no, transactionsPerSecond: 85"
+
 ```
 
 ## References
