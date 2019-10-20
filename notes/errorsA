@@ -1,0 +1,5 @@
+[ERROR] 12:30:58+0300 [Thread-21 (ActiveMQ-client-global-threads)] DefaultPromise.rejectedExecution.error - Failed to submit a listener notification task. Event loop shut down? [errorCode=4gthfh, moreInformationAt=https://errors.corda.net/OS/4.1/4gthfh]
+[ERROR] 12:31:41+0300 [Thread-47 (ActiveMQ-client-global-threads)] DefaultPromise.rejectedExecution.error - Failed to submit a listener notification task. Event loop shut down? [errorCode=4gthfh, moreInformationAt=https://errors.corda.net/OS/4.1/4gthfh]
+
+[ERROR] 15:20:24+0300 [Thread-3 (ActiveMQ-client-global-threads)] DefaultPromise.rejectedExecution.error - Failed to submit a listener notification task. Event loop shut down? [errorCode=4gthfh, moreInformationAt=https://errors.corda.net/OS/4.1/4gthfh]
+[ERROR] 15:20:58+0300 [Thread-21 (ActiveMQ-client-global-threads)] DefaultPromise.rejectedExecution.error - Failed to submit a listener notification task. Event loop shut down? [errorCode=4gthfh, moreInformationAt=https://errors.corda.net/OS/4.1/4gthfh]
