@@ -1,4 +1,14 @@
 buildscript {
+    def confFile = '.secrets'
+    Properties conf = new Properties()
+    if (file(confFile).exists()) {
+        file(confFile).withInputStream { conf.load(it) }
+        ext.artifactory_user = conf.getProperty("CORDA_ARTIFACTORY_USERNAME")
+        ext.artifactory_password = conf.getProperty("CORDA_ARTIFACTORY_PASSWORD")
+    } else {
+        ext.artifactory_user = System.getenv("CORDA_ARTIFACTORY_USERNAME")
+        ext.artifactory_password = System.getenv("CORDA_ARTIFACTORY_PASSWORD")
+    }
     ext {
         corda_release_group = "com.r3.corda"
         corda_release_version = "4.2"
@@ -7,6 +17,7 @@ buildscript {
         log4j_version = "2.11.2"
         slf4j_version = "1.7.25"
         corda_platform_version = 4
+        artifactoryUrl = "https://software.r3.com/artifactory"
 
         testCordapp1 = "com.r3.corda:corda-ptflows:4.2"
     }
@@ -14,7 +25,7 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
-        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
+        maven { url "$artifactoryUrl/corda" }
     }
 
     dependencies {
@@ -26,10 +37,16 @@ buildscript {
 
 allprojects {
     repositories {
-      mavenLocal()
+    //mavenLocal()
       mavenCentral()
       jcenter()
-      maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }
+      maven { url "$artifactoryUrl/corda" }
+      maven { url "$artifactoryUrl/corda-enterprise"
+        credentials {
+          username = artifactory_user
+          password = artifactory_password
+        }
+      }
     }
 }
 
@@ -67,7 +84,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         notary = [validating : false]
         p2pPort 10001
         rpcSettings {
-            address("localhost:10002")
+            address("0.0.0.0:10002")
             adminAddress("localhost:10003")
         }
         extraConfig = [ 'sshd.port':'10004' ]
@@ -80,7 +97,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         notary = [validating : false]
         p2pPort 10021
         rpcSettings {
-            address("localhost:10022")
+            address("0.0.0.0:10022")
             adminAddress("localhost:10023")
         }
         rpcUsers = [[ user: "userN", "password": "x", "permissions": ["ALL"]]]
