@@ -11,18 +11,19 @@ buildscript {
     }
     ext {
         corda_release_group = "com.r3.corda"
-        corda_release_version = "4.2"
-        corda_gradle_plugins_version = "4.0.45"
+        corda_release_version = "4.1"
+        corda_gradle_plugins_version = "5.0.6"
         quasar_version = "0.7.10"
         log4j_version = "2.11.2"
         slf4j_version = "1.7.25"
         corda_platform_version = 4
         artifactoryUrl = "https://software.r3.com/artifactory"
 
-        testCordapp1 = "com.r3.corda:corda-ptflows:4.2"
+        testCordapp1 = "com.exactpro.cordapp-sample:flow10:0.0.1"
     }
 
     repositories {
+        mavenLocal()
         mavenCentral()
         jcenter()
         maven { url "$artifactoryUrl/corda" }
@@ -37,7 +38,7 @@ buildscript {
 
 allprojects {
     repositories {
-    //mavenLocal()
+      mavenLocal()
       mavenCentral()
       jcenter()
       maven { url "$artifactoryUrl/corda" }
@@ -78,30 +79,44 @@ dependencies {
 
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
     nodeDefaults {
+        projectCordapp { deploy = false }
+        cordapp("$testCordapp1")
+        rpcUsers = [[ user: "userN", "password": "X", "permissions": ["ALL"]]]
     }
     node {              // København
-        name "O=Notar 1, L=Copenhagen, C=DK"
-        notary = [validating : false]
+        name "O=Party0, L=Copenhagen, C=DK" // cordform 5.0.6 swallows whitespace in O=
         p2pPort 10001
         rpcSettings {
             address("0.0.0.0:10002")
             adminAddress("localhost:10003")
         }
         extraConfig = [ 'sshd.port':'10004' ]
-        rpcUsers = [[ user: "userN", "password": "z", "permissions": ["ALL"]]]
-        projectCordapp { deploy = false }
-        cordapp("$testCordapp1")
     }
     node {
-        name "O=Notář, L=Prague, C=CZ"
-        notary = [validating : false]
+        name "O=Party1, L=Prague, C=CZ"
+        p2pPort 10011
+        rpcSettings {
+            address("0.0.0.0:10012")
+            adminAddress("localhost:10013")
+        }
+        extraConfig = [ 'sshd.port':'10014' ]
+    }
+    node {
+        name "O=Party2, L=Prague, C=CZ"
         p2pPort 10021
         rpcSettings {
             address("0.0.0.0:10022")
             adminAddress("localhost:10023")
         }
-        rpcUsers = [[ user: "userN", "password": "x", "permissions": ["ALL"]]]
-        projectCordapp { deploy = false }
-        cordapp("$testCordapp1")
+        extraConfig = [ 'sshd.port':'10024' ]
+    }
+    node {
+        name "O=Party3, L=Prague, C=CZ"
+        p2pPort 10031
+        rpcSettings {
+            address("0.0.0.0:10032")
+            adminAddress("localhost:10033")
+        }
+        extraConfig = [ 'sshd.port':'10034' ]
     }
 }

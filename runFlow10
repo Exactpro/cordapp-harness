@@ -1,0 +1,11 @@
+#!/bin/bash
+
+passw=X
+lastparty=3
+tsz=32
+SSH_opts="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+for a in $(seq 0 ${lastparty}); do
+  sshpass -p $passw ssh $SSH_opts -p 100${a}4 userN@localhost \
+  "flow start Check10 testSize: ${tsz}" &
+done
