@@ -1,8 +1,10 @@
 grep -o "O=[^,]*," build.gradle |sed 's/O=//;s/,//' |\
 while read node; do
-    # ls build/nodes/"$node"
+ #  -javaagent:lib/quasar.jar \
     tmux new-window -n "$node" \
-    java -Dcapsule.jvm.args="-Xmx512m -XX:+UseG1GC" -jar "build/nodes/${node}/corda.jar" -b "build/nodes/${node}" ;\
+    java -Dcapsule.jvm.args="-Xmx512m -XX:+UseG1GC" \
+         -jar "build/nodes/${node}/corda.jar" \
+         -b "build/nodes/${node}" ;\
   [ $? -eq 0 -o $? -eq 143 ] || sh
 done
 

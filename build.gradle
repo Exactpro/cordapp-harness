@@ -13,7 +13,7 @@ buildscript {
         corda_release_group = "com.r3.corda"
         corda_release_version = "4.1"
         corda_gradle_plugins_version = "5.0.4"
-     // quasar_version = "0.7.11_r3"
+        quasar_version = "0.7.11_r3"
         log4j_version = "2.11.2"
         slf4j_version = "1.7.25"
         corda_platform_version = 4
@@ -118,5 +118,12 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             adminAddress("localhost:10033")
         }
         extraConfig = [ 'sshd.port':'10034' ]
+    }
+}
+
+task installQuasar(type: Copy) {
+    destinationDir rootProject.file("lib")
+    from(configurations.quasar) {
+        rename 'quasar-core(.*).jar', 'quasar.jar'
     }
 }

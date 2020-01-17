@@ -1,4 +1,5 @@
 .secrets
+/lib/quasar.jar
 build/
 .gradle/
 logs/
