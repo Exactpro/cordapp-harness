@@ -4,7 +4,7 @@ This harness runs a pre-built Cordapp named in line 22 of the build.gradle
 ```
         testCordapp1 = "ggg:aaa:v.v"
 ```
-against CE 4.1 on a number of local nodes.
+against CE 4.3 on a number of local nodes.
 
 ## Running
 
