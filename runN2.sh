@@ -1,6 +1,5 @@
 grep -o "O=[^,]*," build.gradle |sed 's/O=//;s/,//' |\
 while read node; do
-    # ls build/nodes/"$node"
     tmux new-window -n "$node" \
     java -Dcapsule.jvm.args="-Xmx512m -XX:+UseG1GC" \
      -jar "build/nodes/${node}/corda.jar" \
