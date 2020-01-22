@@ -119,6 +119,15 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         }
         extraConfig = [ 'sshd.port':'10034' ]
     }
+    node {
+        name "O=Party4, L=Prague, C=CZ"
+        p2pPort 10041
+        rpcSettings {
+            address("0.0.0.0:10042")
+            adminAddress("localhost:10043")
+        }
+        extraConfig = [ 'sshd.port':'10044' ]
+    }
 }
 
 task installQuasar(type: Copy) {
