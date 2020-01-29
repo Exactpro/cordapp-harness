@@ -82,15 +82,15 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         projectCordapp { deploy = false }
         cordapp("$testCordapp1")
         rpcUsers = [[ user: "userN", "password": "X", "permissions": ["ALL"]]]
+        extraConfig = [ 'disableFreshIdentitiesWarning': true ]
     }
     node {              // København
         name "O=Party0, L=Copenhagen, C=DK" // cordform 5.0.6 swallows whitespace in O=
-        p2pPort 10001
+        p2pPort 10001                       // O=Party 0,.. goes to nodes/Party0/
         rpcSettings {
             address("0.0.0.0:10002")
             adminAddress("localhost:10003")
         }
-        extraConfig = [ 'sshd.port':'10004' ]
     }
     node {
         name "O=Party1, L=Prague, C=CZ"
@@ -99,7 +99,6 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             address("0.0.0.0:10012")
             adminAddress("localhost:10013")
         }
-        extraConfig = [ 'sshd.port':'10014' ]
     }
     node {
         name "O=Party2, L=Prague, C=CZ"
@@ -108,7 +107,6 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             address("0.0.0.0:10022")
             adminAddress("localhost:10023")
         }
-        extraConfig = [ 'sshd.port':'10024' ]
     }
     node {
         name "O=Party3, L=Prague, C=CZ"
@@ -117,7 +115,6 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             address("0.0.0.0:10032")
             adminAddress("localhost:10033")
         }
-        extraConfig = [ 'sshd.port':'10034' ]
     }
     node {
         name "O=Party4, L=Prague, C=CZ"
@@ -126,7 +123,6 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             address("0.0.0.0:10042")
             adminAddress("localhost:10043")
         }
-        extraConfig = [ 'sshd.port':'10044' ]
     }
 }
 
