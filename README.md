@@ -12,4 +12,3 @@ against CE 4.3 on a number of local nodes.
 * R3 artifactory login in .secret OR artifacts in mavenLocal
 * ./gradlew deployN - build nodes & local network in build/nodes
 * (in tmux) ./runN2.sh - run all nodes
-* ./runFlow10 - run flow on 4 nodes
