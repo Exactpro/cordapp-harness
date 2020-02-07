@@ -4,7 +4,7 @@ sync
 grep -o "O=[^,]*," build.gradle |sed 's/O=//;s/,//' |\
 while read node; do
     tmux new-window -n "$node" \
-    java -Dcapsule.jvm.args="-Xmx512m -XX:+UseG1GC" \
+    java -Dcapsule.jvm.args="-Xmx4G -XX:+UseG1GC" \
      -jar "build/nodes/${node}/corda.jar" \
      --no-local-shell \
      -b "build/nodes/${node}" ;\
