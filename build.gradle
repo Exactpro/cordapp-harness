@@ -55,13 +55,17 @@ apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
+configurations {
+    bootstrapper
+}
+
 // this is a fictional cordapp of this project
 // it's harmless, though it's reported as a loaded cordapp
 // to fix that add 'projectCordapp { deploy = false }' in node {}
 cordapp {
     // silence a [jar] task warning
-    targetPlatformVersion corda_platform_version
-    minimumPlatformVersion corda_platform_version
+    targetPlatformVersion 4
+    minimumPlatformVersion 3
     workflow {
         name "project"
         vendor "Exactpro"
@@ -75,6 +79,7 @@ dependencies {
     cordaRuntime "$corda_release_group:corda:$corda_release_version"
     cordaRuntime "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
     cordapp "$testCordapp1"
+    bootstrapper("$corda_release_group:corda-tools-network-bootstrapper:$corda_release_version") { transitive = false }
 }
 
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
@@ -84,17 +89,9 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcUsers = [[ user: "userN", "password": "X", "permissions": ["ALL"]]]
         extraConfig = [ 'disableFreshIdentitiesWarning': true ]
     }
-    node {              // København
-        name "O=Party0, L=Oulu, C=FI" // cordform 5.0.6 swallows whitespace in O=
-        p2pPort 10001                       // O=Party 0,.. goes to nodes/Party0/
-        rpcSettings {
-            address("0.0.0.0:10002")
-            adminAddress("localhost:10003")
-        }
-    }
-    node {
-        name "O=Party1, L=Rome, C=IT"
-        p2pPort 10011
+    node {  // dare try L=København ?
+        name "O=Party1, L=Rome, C=IT" // cordform 5.0.6 swallows whitespace
+        p2pPort 10011                  // O=Party 1,.. goes to nodes/Party1
         rpcSettings {
             address("0.0.0.0:10012")
             adminAddress("localhost:10013")
@@ -116,59 +113,18 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             adminAddress("localhost:10033")
         }
     }
-    node {
-        name "O=Party4, L=Baku, C=AZ"
-        p2pPort 10041
-        rpcSettings {
-            address("0.0.0.0:10042")
-            adminAddress("localhost:10043")
-        }
-    }
-    node {
-        name "O=Party5, L=Riga, C=LV"
-        p2pPort 10051
-        rpcSettings {
-            address("0.0.0.0:10052")
-            adminAddress("localhost:10053")
-        }
-    }
-    node {
-        name "O=Party6, L=Lima, C=PE"
-        p2pPort 10061
-        rpcSettings {
-            address("0.0.0.0:10062")
-            adminAddress("localhost:10063")
-        }
-    }
-    node {
-        name "O=Party7, L=Suva, C=FJ"
-        p2pPort 10071
-        rpcSettings {
-            address("0.0.0.0:10072")
-            adminAddress("localhost:10073")
-        }
-    }
-    node {
-        name "O=Party8, L=Doha, C=QA"
-        p2pPort 10081
-        rpcSettings {
-            address("0.0.0.0:10082")
-            adminAddress("localhost:10083")
-        }
-    }
-    node {
-        name "O=Party9, L=Bern, C=CH"
-        p2pPort 10091
-        rpcSettings {
-            address("0.0.0.0:10092")
-            adminAddress("localhost:10093")
-        }
-    }
 }
 
 task installQuasar(type: Copy) {
     destinationDir rootProject.file("lib")
     from(configurations.quasar) {
         rename 'quasar-core(.*).jar', 'quasar.jar'
+    }
+}
+
+task getBootstrapper(type: Copy) {
+    destinationDir rootProject.file("lib")
+    from(configurations.bootstrapper) {
+        rename 'network-bootstrapper(.*).jar', 'network-bootstrapper.jar'
     }
 }
