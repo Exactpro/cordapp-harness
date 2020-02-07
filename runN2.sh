@@ -1,3 +1,6 @@
+sync
+# sometimes 1 node is "skipped". How comes!?
+
 grep -o "O=[^,]*," build.gradle |sed 's/O=//;s/,//' |\
 while read node; do
     tmux new-window -n "$node" \
