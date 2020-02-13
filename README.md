@@ -15,8 +15,13 @@ against CE 4.3 on a number of local nodes.
 
 ## Running modified net
 
+When one wants to run a net with e.g. non-default `maxMessageSize`
+he may modify `net.conf` (in this dir) and run the following commands to re-deploy nodes
+(copy all the needed CorDapps following this example):
+
 ```
 CorDapp1=~/.m2/repository/com/exactpro/cordapp-sample/flow10/0.0.1/flow10-0.0.1.jar
 cp $CorDapp1 build/nodes/
-. newNet  # note dot preceeding newNet!
+./gradlew getBootstrapper
+. newNet  # note the dot preceding newNet!
 ```
