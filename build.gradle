@@ -125,6 +125,6 @@ task installQuasar(type: Copy) {
 task getBootstrapper(type: Copy) {
     destinationDir rootProject.file("lib")
     from(configurations.bootstrapper) {
-        rename 'network-bootstrapper(.*).jar', 'network-bootstrapper.jar'
+        rename 'corda-tools-network-bootstrapper(-.*).jar', 'corda-bootstrapper.jar'
     }
 }

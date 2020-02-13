@@ -1,0 +1,9 @@
+pushd build/
+java -jar ../lib/corda-bootstrapper.jar \
+  --network-parameter-overrides=../net.conf \
+  --dir nodes \
+&& popd
+
+# https://docs.corda.net/network-bootstrapper.html
+# maxMessageSize: The maximum permitted message size, in bytes. This
+#		 is currently ignored but will be used in a future release.

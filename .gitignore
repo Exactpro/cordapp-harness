@@ -1,6 +1,6 @@
 .secrets
 /lib/quasar.jar
-/lib/corda-tools-network-bootstrapper.jar
+/lib/corda-bootstrapper.jar
 build/
 .gradle/
 logs/
@@ -10,3 +10,4 @@ logs/
 .idea/codeStyles/
 .idea/libraries/
 .idea/misc.xml
+.idea/jarRepositories.xml
