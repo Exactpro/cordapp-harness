@@ -30,7 +30,6 @@ buildscript {
     }
 
     dependencies {
-        classpath "net.corda.plugins:cordapp:$corda_gradle_plugins_version"
         classpath "net.corda.plugins:cordformation:$corda_gradle_plugins_version"
         classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
     }
@@ -51,27 +50,11 @@ allprojects {
     }
 }
 
-apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
 configurations {
     bootstrapper
-}
-
-// this is a fictional cordapp of this project
-// it's harmless, though it's reported as a loaded cordapp
-// to fix that add 'projectCordapp { deploy = false }' in node {}
-cordapp {
-    // silence a [jar] task warning
-    targetPlatformVersion 4
-    minimumPlatformVersion 3
-    workflow {
-        name "project"
-        vendor "Exactpro"
-        licence "Apache-2.0"
-        versionId 1
-    }
 }
 
 dependencies {
@@ -82,9 +65,9 @@ dependencies {
     bootstrapper("$corda_release_group:corda-tools-network-bootstrapper:$corda_release_version") { transitive = false }
 }
 
-task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
+task deployNodes(type: net.corda.plugins.Cordform) {
     nodeDefaults {
-        projectCordapp { deploy = false }
+        projectCordapp { deploy = false }  // don't look for the phantom CorDapp of this project
         cordapp("$testCordapp1")
         rpcUsers = [[ user: "userN", "password": "X", "permissions": ["ALL"]]]
         extraConfig = [ 'disableFreshIdentitiesWarning': true ]
