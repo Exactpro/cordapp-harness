@@ -1,12 +1,12 @@
-sync
-# sometimes 1 node is "skipped". How comes!?
+# sometimes a node is "skipped". Or two. How comes!?
 
-grep -o "O=[^,]*," build.gradle |sed 's/O=//;s/,//' |\
+egrep -o 'name\s+\"[^\"]+\"' build.gradle | grep -o "O=[^,]*," |sed 's/O=//;s/,//' |\
 while read node; do
     tmux new-window -n "$node" \
     java -Dcapsule.jvm.args="-Xmx4G -XX:+UseG1GC" \
      -jar "build/nodes/${node}/corda.jar" \
      --no-local-shell \
+     --logging-level=TRACE \
      -b "build/nodes/${node}" ;\
   [ $? -eq 0 -o $? -eq 143 ] || sh
 done

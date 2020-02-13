@@ -73,8 +73,8 @@ task deployNodes(type: net.corda.plugins.Cordform) {
         extraConfig = [ 'disableFreshIdentitiesWarning': true ]
     }
     node {  // dare try L=København ?
-        name "O=Party1, L=Rome, C=IT" // cordform 5.0.6 swallows whitespace
-        p2pPort 10011                  // O=Party 1,.. goes to nodes/Party1
+        name "O=Party1, L=Rome, C=IT" // cordform 5.0.6 swallows whitespace: "O=Party 1,.." -> nodes/Party1
+        p2pPort 10011
         rpcSettings {
             address("0.0.0.0:10012")
             adminAddress("localhost:10013")
