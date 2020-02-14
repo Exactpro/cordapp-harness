@@ -22,6 +22,14 @@ he may modify `net.conf` (in this dir) and run the following commands to re-depl
 ```
 CorDapp1=~/.m2/repository/com/exactpro/cordapp-sample/flow10/0.0.1/flow10-0.0.1.jar
 cp $CorDapp1 build/nodes/
-./gradlew getBootstrapper
+./gradlew putBootstrapper
 . newNet  # note the dot preceding newNet!
 ```
+
+N.B. Default `maxMessageSize=1048576` cannot be set much higher then 10939215, otherwise you will see errors like
+```
+artemis.core.server.impl.ActiveMQServerImpl JournalImp
+appendAddRecordTransactional:java.lang.IllegalArgumentException:
+Record is too large to store 10940410
+```
+Note that this number is higher then our `maxMessageSize=10939396`, however lowering maxMessageSize lowers this threshold too.

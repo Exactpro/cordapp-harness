@@ -78,7 +78,7 @@
 
             <Policies>
                 <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="100MB"/>
+                <SizeBasedTriggeringPolicy size="2000MB"/>
             </Policies>
 
             <DefaultRolloverStrategy min="1" max="100">
