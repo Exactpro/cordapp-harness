@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+
+    <Properties>
+        <Property name="log-path">${sys:log-path:-logs}</Property>
+        <Property name="log-name">node-${hostName}</Property>
+        <Property name="archive">${log-path}/archive</Property>
+        <Property name="defaultLogLevel">${sys:defaultLogLevel:-info}</Property>
+        <Property name="consoleLogLevel">${sys:consoleLogLevel:-error}</Property>
+        <Property name="detailLogLevel">${sys:detailLogLevel:-trace}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console-Appender" target="SYSTEM_OUT">
+            <PatternLayout Pattern="%date{HH:mm:ssZ} %msg%n"/>
+        </Console>
+        <!-- Will generate up to 20 log files for a given day. During every rollover it will delete
+             those that are older than 60 days, but keep the most recent 10 GB -->
+        <RollingRandomAccessFile name="RollingFile-Appender"
+                     fileName="${log-path}/${log-name}.log"
+                     filePattern="${archive}/${log-name}.%date{yyyy-MM-dd}-%i.log.gz"
+                     immediateFlush="false">
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="500MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="20">
+                <Delete basePath="${archive}" maxDepth="1">
+                    <IfFileName glob="${log-name}*.log"/>
+                    <IfLastModified age="60d">
+                        <IfAny>
+                            <IfAccumulatedFileSize exceeds="10 GB"/>
+                        </IfAny>
+                    </IfLastModified>
+                </Delete>
+            </DefaultRolloverStrategy>
+
+            <PatternLayout pattern="%date{UNIX_MILLIS} %msg%n"/>
+         <!--PatternLayout pattern="%date{UNIX_MILLIS} %msg thread:%t%n"/-->
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="RollingFile-Appender"/>
+            <AppenderRef ref="Console-Appender"/><!-- for behave; net.corda.node.services.network.PersistentNetworkMapCache -->
+        </Root>
+        <Logger name="BasicInfo" additivity="false"><!-- for printBasicNodeInfo (node/../Node.kt, NodeStartup.kt) -->
+            <AppenderRef ref="Console-Appender"/><!-- for behave -->
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+        <Logger name="org.hibernate" level="warn" additivity="false">
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+        <Logger name="org.hibernate.SQL" level="info" additivity="false">
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+        <Logger name="org.apache.activemq.artemis.core.server" level="error" additivity="false">
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+        <Logger name="org.jolokia" additivity="true" level="warn">
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+        <Logger name="DetailedInfo" additivity="false" level="${detailLogLevel}">
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+        <Logger name="net.corda.core.flows" additivity="false" level="trace">
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+        <Logger name="net.corda.core.serialization.internal" additivity="false" level="trace"> // CpSD
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+        <Logger name="com.r3.corda.lib.tokens.workflows.internal.flows" additivity="false" level="trace"> // OAFF
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+    </Loggers>
+</Configuration>

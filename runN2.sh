@@ -3,7 +3,7 @@
 egrep -o 'name\s+\"[^\"]+\"' build.gradle | grep -o "O=[^,]*," |sed 's/O=//;s/,//' |\
 while read node; do
     tmux new-window -n "$node" \
-    java -Dcapsule.jvm.args="-Xmx4G -XX:+UseG1GC" \
+    java -Dcapsule.jvm.args="-Xmx1G -XX:+UseG1GC -Dlog4j.configurationFile=node-log4j2.xml" \
      -jar "build/nodes/${node}/corda.jar" \
      --no-local-shell \
      --logging-level=TRACE \
