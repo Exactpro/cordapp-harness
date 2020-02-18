@@ -8,3 +8,5 @@ logs/
 .idea/codeStyles/
 .idea/libraries/
 .idea/misc.xml
+/lib/
+/.idea/jarRepositories.xml

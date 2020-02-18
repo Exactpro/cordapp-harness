@@ -12,10 +12,9 @@ buildscript {
     ext {
         corda_release_group = "com.r3.corda"
         corda_release_version = "4.2"
-        corda_gradle_plugins_version = "4.0.45"
-        quasar_version = "0.7.10"
+        corda_gradle_plugins_version = "4.0.47"
+        quasar_version = "0.7.11_r3"   // quasar-utils plugin reads it
         log4j_version = "2.11.2"
-        slf4j_version = "1.7.25"
         corda_platform_version = 4
         artifactoryUrl = "https://software.r3.com/artifactory"
 
@@ -50,50 +49,35 @@ allprojects {
     }
 }
 
-apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
-// this is a fictional cordapp of this project
-// it's harmless, though it's reported as a loaded cordapp
-// to fix that add 'projectCordapp { deploy = false }' in node {}
-cordapp {
-    // silence a [jar] task warning
-    targetPlatformVersion corda_platform_version
-    minimumPlatformVersion corda_platform_version
-    workflow {
-        name "project"
-        vendor "Exactpro"
-        licence "Apache-2.0"
-        versionId 1
-    }
-}
-
 dependencies {
-    cordaRuntime "$corda_release_group:corda-rpc:$corda_release_version"
+    cordaRuntime "$corda_release_group:corda-node-api:$corda_release_version"
     cordaRuntime "$corda_release_group:corda:$corda_release_version"
     cordaRuntime "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
     cordapp "$testCordapp1"
 }
 
-task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
+task deployNodes(type: net.corda.plugins.Cordform) {
     nodeDefaults {
-    }
-    node {              // København
-        name "O=Notar 1, L=Copenhagen, C=DK"
-        notary = [validating : false]
-        p2pPort 10001
-        rpcSettings {
-            address("0.0.0.0:10002")
-            adminAddress("localhost:10003")
-        }
-        extraConfig = [ 'sshd.port':'10004' ]
-        rpcUsers = [[ user: "userN", "password": "z", "permissions": ["ALL"]]]
-        projectCordapp { deploy = false }
+	projectCordapp { deploy = false }  // don't look for the phantom CorDapp of this project
         cordapp("$testCordapp1")
     }
     node {
-        name "O=Notář, L=Prague, C=CZ"
+        name "O=Party1, L=Rome, C=IT"
+        notary = [validating : false]
+        p2pPort 10011
+        rpcSettings {
+            address("0.0.0.0:10012")
+            adminAddress("localhost:10013")
+        }
+     // extraConfig = [ 'sshd.port':'10014' ]
+        rpcUsers = [[ user: "userN", "password": "z", "permissions": ["ALL"]]]
+     // cordapp("$testCordapp1")
+    }
+    node {
+        name "O=Party2, L=Oslo, C=NO"
         notary = [validating : false]
         p2pPort 10021
         rpcSettings {
@@ -101,7 +85,5 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             adminAddress("localhost:10023")
         }
         rpcUsers = [[ user: "userN", "password": "x", "permissions": ["ALL"]]]
-        projectCordapp { deploy = false }
-        cordapp("$testCordapp1")
     }
 }
