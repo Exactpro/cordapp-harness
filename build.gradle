@@ -55,8 +55,8 @@ configurations {
 }
 
 dependencies {
-    runtimeOnly  "$corda_release_group:corda-node-api:$corda_release_version"
-    runtimeOnly  "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
+    runtime  "$corda_release_group:corda-node-api:$corda_release_version"
+    runtime  "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
     cordaRuntime "$corda_release_group:corda:$corda_release_version"
     cordapp "$testCordapp1"
     bootstrapper("$corda_release_group:corda-tools-network-bootstrapper:$corda_release_version") { transitive = false }
@@ -69,6 +69,14 @@ task deployNodes(type: net.corda.plugins.Cordform) {
         rpcUsers = [[ user: "userN", "password": "X", "permissions": ["ALL"]]]
         extraConfig = [ 'disableFreshIdentitiesWarning': true ]
     }
+ // node {
+ //     name "O=Party0, L=Oulu, C=FI"
+ //     p2pPort 10001
+ //     rpcSettings {
+ //         address("0.0.0.0:10002")
+ //         adminAddress("localhost:10003")
+ //     }
+ // }
     node {  // dare try L=København ?
         name "O=Party1, L=Rome, C=IT" // cordform 5.0.6 swallows whitespace: "O=Party 1,.." -> nodes/Party1
         p2pPort 10011
@@ -93,6 +101,70 @@ task deployNodes(type: net.corda.plugins.Cordform) {
             adminAddress("localhost:10033")
         }
     }
+ // node {
+ //     name "O=Party4, L=Baku, C=AZ"
+ //     p2pPort 10041
+ //     rpcSettings {
+ //         address("0.0.0.0:10042")
+ //         adminAddress("localhost:10043")
+ //     }
+ // }
+ // node {
+ //     name "O=Party5, L=Riga, C=LT"
+ //     p2pPort 10051
+ //     rpcSettings {
+ //         address("0.0.0.0:10052")
+ //         adminAddress("localhost:10053")
+ //     }
+ // }
+ // node {
+ //     name "O=Party6, L=Lima, C=PE"
+ //     p2pPort 10061
+ //     rpcSettings {
+ //         address("0.0.0.0:10062")
+ //         adminAddress("localhost:10063")
+ //     }
+ // }
+ // node {
+ //     name "O=Party7, L=Suva, C=FJ"
+ //     p2pPort 10071
+ //     rpcSettings {
+ //         address("0.0.0.0:10072")
+ //         adminAddress("localhost:10073")
+ //     }
+ // }
+ // node {
+ //     name "O=Party8, L=Doha, C=QA"
+ //     p2pPort 10081
+ //     rpcSettings {
+ //         address("0.0.0.0:10082")
+ //         adminAddress("localhost:10083")
+ //     }
+ // }
+ // node {
+ //     name "O=Party9, L=Bern, C=CH"
+ //     p2pPort 10091
+ //     rpcSettings {
+ //         address("0.0.0.0:10092")
+ //         adminAddress("localhost:10093")
+ //     }
+ // }
+ // node {
+ //     name "O=PartyA, L=Oulu, C=FI"
+ //     p2pPort 10006
+ //     rpcSettings {
+ //         address("0.0.0.0:10007")
+ //         adminAddress("localhost:10008")
+ //     }
+ // }
+ // node {
+ //     name "O=PartyB, L=Rome, C=IT"
+ //     p2pPort 10016
+ //     rpcSettings {
+ //         address("0.0.0.0:10017")
+ //         adminAddress("localhost:10018")
+ //     }
+ // }
 }
 
 // lib/quasar.jar is for runtime instrumentation of classes by Quasar.
