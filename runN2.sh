@@ -1,3 +1,7 @@
+if [ -z $TMUX ]
+then echo Please run inside tmux! Cannot continue.
+fi
+
 grep -o "O=[^,]*," build.gradle |sed 's/O=//;s/,//' |\
 while read node; do
     # ls build/nodes/"$node"

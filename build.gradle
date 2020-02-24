@@ -15,7 +15,6 @@ buildscript {
         corda_gradle_plugins_version = "4.0.47"
         quasar_version = "0.7.11_r3"   // quasar-utils plugin reads it
         log4j_version = "2.11.2"
-        corda_platform_version = 4
         artifactoryUrl = "https://software.r3.com/artifactory"
 
         testCordapp1 = "com.r3.corda:corda-ptflows:4.2"
@@ -28,7 +27,6 @@ buildscript {
     }
 
     dependencies {
-        classpath "net.corda.plugins:cordapp:$corda_gradle_plugins_version"
         classpath "net.corda.plugins:cordformation:$corda_gradle_plugins_version"
         classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
     }
@@ -36,7 +34,6 @@ buildscript {
 
 allprojects {
     repositories {
-    //mavenLocal()
       mavenCentral()
       jcenter()
       maven { url "$artifactoryUrl/corda" }
@@ -55,8 +52,10 @@ apply plugin: 'net.corda.plugins.quasar-utils'
 dependencies {
     cordaRuntime "$corda_release_group:corda-node-api:$corda_release_version"
     cordaRuntime "$corda_release_group:corda:$corda_release_version"
-    cordaRuntime "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
     cordapp "$testCordapp1"
+
+ // only Botstrapper uses that? it's log seems empty?
+ // cordaRuntime "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
 }
 
 task deployNodes(type: net.corda.plugins.Cordform) {
